@@ -81,6 +81,7 @@ async function run() {
 
     if (versions.length) {
       let pythonVersion = '';
+      let pythonVersions: string[] = []
       const arch: string = core.getInput('architecture') || os.arch();
       const updateEnvironment = core.getBooleanInput('update-environment');
       core.startGroup('Installed versions');
@@ -108,7 +109,9 @@ async function run() {
           pythonVersion = installed.version;
           core.info(`Successfully set up ${installed.impl} (${pythonVersion})`);
         }
+        pythonVersions.push(pythonVersion)
       }
+      core.setOutput('python-versions', pythonVersions.join(','));
       core.endGroup();
       const cache = core.getInput('cache');
       if (cache && isCacheFeatureAvailable()) {
