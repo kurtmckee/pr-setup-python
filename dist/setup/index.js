@@ -66968,13 +66968,14 @@ function run() {
             const allowPreReleases = core.getBooleanInput('allow-prereleases');
             if (versions.length) {
                 let pythonVersion = '';
+                let pythonVersions = [];
                 const arch = core.getInput('architecture') || os.arch();
                 const updateEnvironment = core.getBooleanInput('update-environment');
                 core.startGroup('Installed versions');
                 for (const version of versions) {
                     if (isPyPyVersion(version)) {
                         const installed = yield finderPyPy.findPyPyVersion(version, arch, updateEnvironment, checkLatest, allowPreReleases);
-                        pythonVersion = `${installed.resolvedPyPyVersion}-${installed.resolvedPythonVersion}`;
+                        pythonVersion = `${installed.resolvedPyPyVersion.trim()}-${installed.resolvedPythonVersion}`;
                         core.info(`Successfully set up PyPy ${installed.resolvedPyPyVersion} with Python (${installed.resolvedPythonVersion})`);
                     }
                     else {
@@ -66982,7 +66983,9 @@ function run() {
                         pythonVersion = installed.version;
                         core.info(`Successfully set up ${installed.impl} (${pythonVersion})`);
                     }
+                    pythonVersions.push(pythonVersion);
                 }
+                core.setOutput('python-versions', pythonVersions.join(','));
                 core.endGroup();
                 const cache = core.getInput('cache');
                 if (cache && utils_1.isCacheFeatureAvailable()) {

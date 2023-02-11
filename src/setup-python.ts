@@ -94,7 +94,7 @@ async function run() {
             checkLatest,
             allowPreReleases
           );
-          pythonVersion = `${installed.resolvedPyPyVersion}-${installed.resolvedPythonVersion}`;
+          pythonVersion = `${installed.resolvedPyPyVersion.trim()}-${installed.resolvedPythonVersion}`;
           core.info(
             `Successfully set up PyPy ${installed.resolvedPyPyVersion} with Python (${installed.resolvedPythonVersion})`
           );
